@@ -2,6 +2,24 @@
 
 Nothing but skills.
 
+These skills follow the [Agent Skills](https://agentskills.io) open standard, ensuring portability and compatibility across AI agent clients that support the standard.
+
+## Installation
+
+### Local
+Install a packaged `.skill` file:
+```bash
+gemini skills install path/to/skill-name.skill --scope user
+```
+
+### Remote
+Install directly from GitHub:
+```bash
+gemini skills install https://github.com/ipaddicting/skills.git --path skill-folder-name
+```
+
+*Note: For Gemini CLI, run `/skills reload` after installation to activate changes.*
+
 ## Available Skills
 
 ### [Apple Health Analyst](./apple-health-analyst)
