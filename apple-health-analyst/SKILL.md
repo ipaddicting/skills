@@ -1,6 +1,6 @@
 ---
 name: apple-health-analyst
-description: Parse and analyze Apple Health export ZIP archives. Use when the user wants to extract insights from their health records (records.csv, workouts.csv, activity_summaries.csv), identify trends, and generate markdown-formatted health reports.
+description: Parse and analyze Apple Health export ZIP archives. Use when the user wants to extract insights from their health records (records-<Type>.csv, workouts-<Type>.csv, activity_summaries.csv), identify trends, and generate markdown-formatted health reports.
 ---
 
 # Apple Health Analyst
@@ -23,15 +23,15 @@ python3 scripts/parse_health_data.py path/to/export.zip --out output_dir/
 This will:
 1. Extract all sub-folders (e.g., `workout-routes/`, `electrocardiograms/`).
 2. Generate `user.csv`: The user's basic health profile (sex, blood type, etc.).
-3. Generate `records.csv`: Heart rate, steps, etc.
-4. Generate `workouts.csv`: Detailed session data with relative paths to route files.
+3. Generate `records-<Type>.csv`: Heart rate, steps, etc., split by record type.
+4. Generate `workouts-<Type>.csv`: Detailed session data, split by workout type, with relative paths to route files.
 5. Generate `activity_summaries.csv`: Daily activity ring data.
 
 ### 2. Advanced Data Context
 
 The extracted folders provide deeper context for analysis:
 - **`electrocardiograms/*.csv`**: Raw ECG data.
-- **`workout-routes/*.gpx`**: GPS data for workouts. Linked in `workouts.csv` via the `route_file` column.
+- **`workout-routes/*.gpx`**: GPS data for workouts. Linked in `workouts-<Type>.csv` via the `route_file` column.
 
 ### 3. Trend Analysis
 

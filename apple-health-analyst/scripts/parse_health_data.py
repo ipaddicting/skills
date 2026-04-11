@@ -38,7 +38,9 @@ def parse_xml(xml_path, output_dir):
     print(f"Parsing {xml_path}...")
     context = ET.iterparse(xml_path, events=("start", "end"))
     
-    records, workouts, activity_summaries, user_info = [], [], [], []
+    records_by_type = {}
+    workouts_by_type = {}
+    activity_summaries, user_info = [], []
     current_workout = None
     
     for event, elem in context:
@@ -74,18 +76,27 @@ def parse_xml(xml_path, output_dir):
                 
         elif event == "end":
             if elem.tag == "Workout":
-                workouts.append(current_workout)
+                w_type = current_workout.get('workoutActivityType', 'Unknown').replace('HKWorkoutActivityType', '')
+                if w_type not in workouts_by_type: workouts_by_type[w_type] = []
+                workouts_by_type[w_type].append(current_workout)
                 current_workout = None
                 elem.clear()
-            elif elem.tag in ["Record", "ActivitySummary", "Me"]:
-                if elem.tag == "Record": records.append(elem.attrib)
-                elif elem.tag == "ActivitySummary": activity_summaries.append(elem.attrib)
+            elif elem.tag == "Record":
+                r_type = elem.attrib.get('type', 'Unknown').replace('HKQuantityTypeIdentifier', '').replace('HKCategoryTypeIdentifier', '').replace('HKCharacteristicTypeIdentifier', '')
+                if r_type not in records_by_type: records_by_type[r_type] = []
+                records_by_type[r_type].append(elem.attrib)
+                elem.clear()
+            elif elem.tag in ["ActivitySummary", "Me"]:
+                if elem.tag == "ActivitySummary": activity_summaries.append(elem.attrib)
                 elem.clear()
     
     save_to_csv(user_info, "user.csv", output_dir)
-    save_to_csv(records, "records.csv", output_dir)
-    save_to_csv(workouts, "workouts.csv", output_dir)
     save_to_csv(activity_summaries, "activity_summaries.csv", output_dir)
+    
+    for r_type, r_data in records_by_type.items():
+        save_to_csv(r_data, f"records-{r_type}.csv", output_dir)
+    for w_type, w_data in workouts_by_type.items():
+        save_to_csv(w_data, f"workouts-{w_type}.csv", output_dir)
 
 def save_to_csv(data, filename, output_dir):
     if not data: return
