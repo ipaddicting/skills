@@ -40,7 +40,24 @@ Perform analysis based on the extracted data:
 - **Vitals Monitoring:** Heart rate, sleep, and other markers.
 - **Goal Comparison:** Comparison against benchmarks in `references/benchmarks.md`.
 
-### 4. Report Generation
+### 4. Hiking Analysis
+
+A dedicated script for hiking enthusiasts to correlate trail performance with health and environmental data.
+
+**Command:**
+```bash
+python3 scripts/analyze_hiking.py output_dir/
+```
+
+This will:
+1. **Time Tracking:** Calculate `work_time_s` (active duration) vs `elapsed_time_s`.
+2. **Terrain Analysis:** Compute cumulative `elevation_gain_m` and `elevation_descented_m` from GPX route files.
+3. **Heart Rate Correlation:** Capture `avg_hr` and `max_hr` specifically for the hike duration.
+4. **Effort Mapping:** Categorize intensity based on METs (Light < 3.0, Moderate 3.0-6.0, Vigorous > 6.0).
+5. **Weather Context:** Include temperature and humidity metadata from the workout.
+6. **Consolidated Report:** Generate `workouts-Hiking-analysis.csv` in the output directory.
+
+### 5. Report Generation
 
 Present findings as a structured markdown report covering summaries, key metrics, and data-driven insights.
 
@@ -53,3 +70,4 @@ Present findings as a structured markdown report covering summaries, key metrics
 
 ### scripts/
 - **`parse_health_data.py`**: A script to extract ZIP archives and parse health data.
+- **`analyze_hiking.py`**: A script to perform detailed hiking performance and health correlation.
